@@ -1,0 +1,4 @@
+ABC Company
+Invoice Number: INV101
+Date: 21 May 2026
+Total Amount: 15000
