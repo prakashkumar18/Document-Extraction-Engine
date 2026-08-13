@@ -1,9 +1,10 @@
 import streamlit as st
 import requests
 
-st.title(
-    "AI Document Extraction Engine"
-)
+# Deployed FastAPI backend
+BACKEND_URL = "https://document-extraction-engine-6q2n.onrender.com"
+
+st.title("AI Document Extraction Engine")
 
 uploaded_file = st.file_uploader(
     "Upload TXT or PDF File",
@@ -31,42 +32,37 @@ if st.button("Extract"):
             "document_type": document_type
         }
 
-        response = requests.post(
-            "http://127.0.0.1:8000/extract",
-            files=files,
-            data=data
-        )
-
-        st.subheader(
-            "Extraction Result"
-        )
-
         try:
-
-            st.json(
-                response.json()
+            response = requests.post(
+                f"{BACKEND_URL}/extract",
+                files=files,
+                data=data
             )
 
-        except:
+            st.subheader("Extraction Result")
 
-            st.write(
-                response.text
-            )
+            try:
+                st.json(response.json())
 
-st.subheader(
-    "Extraction History"
-)
+            except Exception:
+                st.write(response.text)
+
+        except requests.exceptions.RequestException as e:
+            st.error(f"Unable to connect to backend: {e}")
+
+    else:
+        st.warning("Please upload a TXT or PDF file.")
+
+st.subheader("Extraction History")
 
 try:
 
     history = requests.get(
-        "http://127.0.0.1:8000/extractions"
+        f"{BACKEND_URL}/extractions"
     )
 
     st.json(history.json())
 
-except:
-
-    st.write(
-        "Backend not running"
+except requests.exceptions.RequestException:
+    st.write("Unable to connect to backend.")
     )
