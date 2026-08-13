@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 
-# Deployed FastAPI backend
 BACKEND_URL = "https://document-extraction-engine-6q2n.onrender.com"
 
 st.title("AI Document Extraction Engine")
@@ -43,7 +42,6 @@ if st.button("Extract"):
 
             try:
                 st.json(response.json())
-
             except Exception:
                 st.write(response.text)
 
@@ -56,7 +54,6 @@ if st.button("Extract"):
 st.subheader("Extraction History")
 
 try:
-
     history = requests.get(
         f"{BACKEND_URL}/extractions"
     )
@@ -65,4 +62,3 @@ try:
 
 except requests.exceptions.RequestException:
     st.write("Unable to connect to backend.")
-    )
